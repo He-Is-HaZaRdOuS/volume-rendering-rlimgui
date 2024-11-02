@@ -12,7 +12,7 @@ set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
 target_compile_options(
     raylib_imgui_compiler_flags
     INTERFACE
-        "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-pedantic-errors;-Werror;-Wall;-Weffc++;-Wextra;-Wconversion;-Wsign-conversion>>"
+        "$<${gcc_like_cxx}:$<BUILD_INTERFACE:-pedantic-errors;;-Wall;-Weffc++;-Wextra;-Wconversion;-Wsign-conversion>>"
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-W4>>")
 
 
