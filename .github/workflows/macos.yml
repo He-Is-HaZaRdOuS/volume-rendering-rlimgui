@@ -1,0 +1,34 @@
+name: MacOS CI Test
+on:
+  push:
+    branches: [main, master, dev]
+  pull_request:
+    branches: [main, master, dev]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-13
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+          disable-telemetry: true
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@bfbfe9ca0b2c69a076f6513393d61fc478fb54f8 # v0.41.0
+        with:
+          clangtidy: true
+          cmake: true
+          compiler: llvm-14.0.6
+      - name: configure
+        run: |
+          cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_BUILD_TYPE="Debug"
+      - name: building
+        run: |
+          cmake --build build --config Debug --target Catch_tests_run -j4
+      - name: run unit tests
+        working-directory: ./build/bin
+        run: |
+          ./Catch_tests_run
